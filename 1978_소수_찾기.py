@@ -1,10 +1,18 @@
-import sys
+import math
 
-num = int(sys.stdin.readline())
+def isPrime(x):
+    for i in range(2, int(math.sqrt(x))+1):
+        if x % i == 0:
+            return False
+    return True
 
-def sol(num):
-    for i in range(num,0,-1):
-        print(i)
+n = int(input())
+arr = map(int, input().split())
+cnt = 0
 
-sol(num)
-        
+for i in arr:
+    if i == 1:
+        continue
+    if isPrime(i):
+         cnt += 1
+print(cnt)
