@@ -4,33 +4,27 @@ n = int(input())
 num = list(map(int, input().split()))
 # + - * /
 operator_num = list(map(int, input().split()))
-operator = ['+','-','*','/']
-operator_list = []
 
-# 연산자의 개수 만큼 리스트에 담기
-for i in range(4):
-    for j in range(operator_num[i]):
-        operator_list.append(operator[i])
+min_num = 1e9
+max_num = -1e9
 
-small = 1e9
-big = -1e9
+def dfs(depth, total, plus, minus, multiply, divide):
+    global max_num, min_num
+    if depth == n:
+        max_num = max(max_num, total)
+        min_num = min(min_num, total)
+        return
+    
+    if plus:
+        dfs(depth+1, total+num[depth], plus-1, minus, multiply, divide)
+    if minus:
+        dfs(depth+1, total-num[depth], plus, minus-1, multiply, divide)
+    if multiply:
+        dfs(depth+1, total*num[depth], plus, minus, multiply-1, divide)
+    if divide:
+        dfs(depth+1, int(total/num[depth]), plus, minus, multiply, divide-1)
 
-def cal(op):
-    total = num[0]
-    for i in range(len(op)):
-        if op[i] == '+':
-            total += num[i+1]
-        elif op[i] == '-':
-            total -= num[i+1]
-        elif op[i] == '*':
-            total *= num[i+1]
-        elif op[i] == '/':
-            total = int(total / num[i+1])
-    return total
-for case in permutations(operator_list, n-1) :
-    # print(case[0], case[1], case[2], case[3], case[4])
-    small = min(small, cal(case))
-    big = max(big, cal(case))
+dfs(1, num[0], operator_num[0], operator_num[1], operator_num[2], operator_num[3])
 
-print(big)
-print(small)
+print(max_num)
+print(min_num)
